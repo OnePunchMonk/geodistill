@@ -1,0 +1,61 @@
+# Default GeoDistill Configuration
+
+teacher:
+  teacher_type: multi
+  vggt_model_name: "facebook/vggt-1b"
+  depth_anything_model_name: "depth-anything/Depth-Anything-V2-Large"
+  teacher_resolution: 518
+  device: "cuda"
+
+student:
+  backbone: vit_base_patch14_518
+  pretrain_source: dinov2
+  freeze_backbone: true
+  num_registers: 4
+  feature_layers: [2, 5, 8, 11]
+  input_resolution: 518
+  lora:
+    rank: 8
+    alpha: 16.0
+    dropout: 0.05
+    target_modules: ["qkv", "fc1", "fc2"]
+
+decoder:
+  hidden_dim: 256
+  predict_depth: true
+  predict_normals: true
+  predict_point_map: false
+  fusion_type: add
+
+loss:
+  lambda_depth: 1.0
+  lambda_normal: 1.0
+  lambda_point_map: 0.0
+  lambda_feature_kl: 0.1
+  lambda_geometric_consistency: 0.5
+  lambda_edge_aware: 0.2
+  depth_loss_type: si_mse
+  normal_loss_type: cosine
+
+data:
+  dataset_name: nyuv2
+  data_root: "./data"
+  teacher_cache_dir: "./data/teacher_cache"
+  train_split: train
+  val_split: val
+  image_size: [518, 518]
+  batch_size: 16
+  num_workers: 4
+  augment: true
+
+training:
+  max_epochs: 50
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  warmup_steps: 1000
+  mixed_precision: bf16
+  log_interval: 50
+  eval_interval: 1000
+  save_interval: 5
+  output_dir: "./outputs/geodistill_base"
+  wandb_project: geodistill

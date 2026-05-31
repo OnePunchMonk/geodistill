@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geodistill"
+version = "0.1.0"
+description = "GeoDistill: Geometry-Grounded Knowledge Distillation from 3D Foundation Models"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "GeoDistill Team"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "timm>=0.9.0",
+    "einops>=0.7.0",
+    "numpy>=1.24.0",
+    "Pillow>=10.0.0",
+    "scipy>=1.11.0",
+    "opencv-python>=4.8.0",
+    "h5py>=3.9.0",
+    "omegaconf>=2.3.0",
+    "accelerate>=0.25.0",
+    "wandb>=0.16.0",
+    "tqdm>=4.66.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+]
+vggt = [
+    "vggt",
+]
+
+[project.scripts]
+geodistill-train = "geodistill.train:main"
+geodistill-probe = "geodistill.probing:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
